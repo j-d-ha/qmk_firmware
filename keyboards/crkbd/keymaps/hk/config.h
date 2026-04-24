@@ -1,0 +1,11 @@
+#pragma once
+
+#define MASTER_RIGHT
+
+#define PS2_DATA_PIN D1
+#define PS2_CLOCK_PIN D0
+
+#define PS2_MOUSE_USE_REMOTE_MODE
+#define PS2_MOUSE_INIT_DELAY 500
+#define PS2_MOUSE_INVERT_X
+#define PS2_MOUSE_INVERT_Y

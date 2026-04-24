@@ -125,7 +125,7 @@ ifeq ($(strip $(MOUSEKEY_ENABLE)), yes)
     MOUSE_ENABLE := yes
 endif
 
-VALID_POINTING_DEVICE_DRIVER_TYPES := adns5050 adns9800 analog_joystick azoteq_iqs5xx cirque_pinnacle_i2c cirque_pinnacle_spi paw3204 paw3222 pmw3320 pmw3360 pmw3389 pimoroni_trackball custom
+VALID_POINTING_DEVICE_DRIVER_TYPES := adns5050 adns9800 analog_joystick azoteq_iqs5xx cirque_pinnacle_i2c cirque_pinnacle_spi paw3204 paw3222 pmw3320 pmw3360 pmw3389 pimoroni_trackball ps2 custom
 ifeq ($(strip $(POINTING_DEVICE_ENABLE)), yes)
     ifeq ($(filter $(POINTING_DEVICE_DRIVER),$(VALID_POINTING_DEVICE_DRIVER_TYPES)),)
         $(call CATASTROPHIC_ERROR,Invalid POINTING_DEVICE_DRIVER,POINTING_DEVICE_DRIVER="$(POINTING_DEVICE_DRIVER)" is not a valid pointing device type)
@@ -161,6 +161,9 @@ ifeq ($(strip $(POINTING_DEVICE_ENABLE)), yes)
             SPI_DRIVER_REQUIRED = yes
         else ifeq ($(strip $(POINTING_DEVICE_DRIVER)), pimoroni_trackball)
             I2C_DRIVER_REQUIRED = yes
+        else ifeq ($(strip $(POINTING_DEVICE_DRIVER)), ps2)
+            PS2_ENABLE = yes
+            SRC += drivers/ps2/ps2_mouse.c
         else ifneq ($(filter $(strip $(POINTING_DEVICE_DRIVER)),pmw3360 pmw3389),)
             SPI_DRIVER_REQUIRED = yes
             SRC += drivers/sensors/pmw33xx_common.c
