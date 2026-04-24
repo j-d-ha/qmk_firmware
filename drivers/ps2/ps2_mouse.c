@@ -39,17 +39,12 @@ static inline void ps2_mouse_enable_scrolling(void);
 static inline void ps2_mouse_scroll_button_task(report_mouse_t *mouse_report);
 
 static inline bool side_has_trackpoint(void) {
-#if defined(HK_POINTING_DEVICE_LEFT_TRACKPOINT) || defined(HK_POINTING_DEVICE_RIGHT_TRACKPOINT)
-    if (is_keyboard_master()) {
-#    if defined(HK_POINTING_DEVICE_RIGHT_TRACKPOINT)
-        return true;
-#    endif
-        return false;
-    }
-#    if defined(HK_POINTING_DEVICE_LEFT_TRACKPOINT)
+#if defined(HK_POINTING_DEVICE_LEFT_TRACKPOINT) && defined(HK_POINTING_DEVICE_RIGHT_TRACKPOINT)
     return true;
-#    endif
-    return false;
+#elif defined(HK_POINTING_DEVICE_LEFT_TRACKPOINT)
+    return is_keyboard_left();
+#elif defined(HK_POINTING_DEVICE_RIGHT_TRACKPOINT)
+    return !is_keyboard_left();
 #else
     return true;
 #endif
