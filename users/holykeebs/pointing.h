@@ -54,7 +54,12 @@ typedef struct {
 } hk_display_state_t;
 
 typedef struct {
+    bool init;
     bool dirty;
+    bool is_main_side;
+    bool setting_default_scale;
+    bool setting_sniping_scale;
+    bool setting_scroll_buffer;
 
     hk_pointer_state_t main;
     hk_pointer_state_t peripheral;
