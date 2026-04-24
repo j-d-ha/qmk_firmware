@@ -3,6 +3,10 @@ EXTRAKEY_ENABLE  = yes
 MOUSEKEY_ENABLE  = yes
 
 ifneq ($(POINTING_DEVICE),)
+    ifeq ($(PLATFORM),CHIBIOS)
+        SERIAL_DRIVER = vendor
+    endif
+
     SRC += $(USER_PATH)/holykeebs.c
     SRC += $(USER_PATH)/hk_debug.c
     SRC += $(USER_PATH)/pimoroni.c
@@ -23,7 +27,11 @@ ifneq ($(POINTING_DEVICE),)
     ifeq ($(POINTING_DEVICE),trackpoint)
         POINTING_DEVICE_ENABLE = yes
         POINTING_DEVICE_DRIVER = ps2
-        PS2_DRIVER ?= busywait
+        ifeq ($(PLATFORM),CHIBIOS)
+            PS2_DRIVER ?= vendor
+        else
+            PS2_DRIVER ?= busywait
+        endif
         OPT_DEFS += -DHK_POINTING_DEVICE_RIGHT_TRACKPOINT
         OPT_DEFS += -DHK_MASTER_RIGHT
     endif
@@ -42,7 +50,11 @@ ifneq ($(POINTING_DEVICE),)
             POINTING_DEVICE_DRIVER = pimoroni_trackball
         else ifeq ($(SIDE),right)
             POINTING_DEVICE_DRIVER = ps2
-            PS2_DRIVER ?= busywait
+            ifeq ($(PLATFORM),CHIBIOS)
+                PS2_DRIVER ?= vendor
+            else
+                PS2_DRIVER ?= busywait
+            endif
         else
             $(error [HolyKeebs] SIDE must be left or right)
         endif

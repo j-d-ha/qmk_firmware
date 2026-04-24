@@ -10,6 +10,10 @@
 #    else
 #        error "Missing HK master side definition"
 #    endif
+
+#    if !defined(__AVR__) && !defined(SERIAL_USART_TX_PIN)
+#        define SERIAL_USART_TX_PIN GP1
+#    endif
 #endif
 
 #if defined(HK_POINTING_DEVICE_LEFT_PIMORONI) || defined(HK_POINTING_DEVICE_RIGHT_PIMORONI)
@@ -39,10 +43,21 @@
 #        define PS2_MOUSE_INIT_DELAY 500
 #    endif
 #    ifndef PS2_DATA_PIN
-#        define PS2_DATA_PIN D1
+#        if defined(__AVR__)
+#            define PS2_DATA_PIN D1
+#        else
+#            define PS2_DATA_PIN GP2
+#        endif
 #    endif
 #    ifndef PS2_CLOCK_PIN
-#        define PS2_CLOCK_PIN D0
+#        if defined(__AVR__)
+#            define PS2_CLOCK_PIN D0
+#        else
+#            define PS2_CLOCK_PIN GP3
+#        endif
+#    endif
+#    if !defined(__AVR__) && !defined(PS2_PIO_USE_PIO1)
+#        define PS2_PIO_USE_PIO1
 #    endif
 #endif
 
