@@ -2,68 +2,66 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-
-#include "report.h"
-
-typedef enum {
-    HK_NONE = 0,
-    HK_PIMORONI,
-    HK_TRACKPOINT,
-    HK_CIRQUE35,
-    HK_CIRQUE40,
-    HK_AZOTEQ_TPS43,
-    HK_AZOTEQ_TPS65,
-} hk_pointing_device_type;
+#include "quantum.h"
 
 typedef enum {
-    HK_DEFAULT,
-    HK_SNIPING,
-    HK_SCROLL_BUFFER,
-} hk_cursor_mode;
+    POINTER_KIND_NONE,
+    POINTER_KIND_PIMORONI_TRACKBALL,
+    POINTER_KIND_TRACKPOINT,
+    POINTER_KIND_CIRQUE35,
+    POINTER_KIND_CIRQUE40,
+    POINTER_KIND_TPS43,
+} hk_pointer_kind;
 
 typedef enum {
-    HK_FREE,
-    HK_VERTICAL,
-    HK_HORIZONTAL,
+    SCROLL_LOCK_OFF,
+    SCROLL_LOCK_HORIZONTAL,
+    SCROLL_LOCK_VERTICAL,
 } hk_scroll_lock;
 
-typedef struct {
-    bool                    is_main_side;
-    hk_pointing_device_type kind;
+typedef enum {
+    CURSOR_MODE_DEFAULT,
+    CURSOR_MODE_SNIPING,
+} hk_cursor_mode;
 
-    hk_cursor_mode cursor_mode;
-    bool           drag_scroll;
-    hk_scroll_lock scroll_lock;
-    bool           invert_scroll;
-
-    float   default_multiplier;
-    float   sniping_multiplier;
-    uint8_t scroll_buffer;
-
-    float   rounding_carry_x;
-    float   rounding_carry_y;
-    int16_t scroll_accum_h;
-    int16_t scroll_accum_v;
+typedef struct PACKED {
+    hk_pointer_kind pointer_kind : 4;
+    hk_cursor_mode cursor_mode : 2;
+    hk_scroll_lock scroll_lock : 2;
+    bool drag_scroll : 1;
+    float pointer_default_multiplier;
+    float pointer_sniping_multiplier;
+    uint8_t pointer_scroll_buffer_size;
 } hk_pointer_state_t;
 
-typedef struct {
-    uint8_t key_row;
-    uint8_t key_col;
-    bool    key_pressed;
-    uint8_t highest_layer;
+#define HK_OLED_MAX_PRESSING_KEYCODES 6
+
+typedef struct PACKED {
+    uint16_t       last_kc;
+    keypos_t       last_pos;
+    report_mouse_t last_mouse;
+
+    // Buffer to indicate pressing keys.
+    char pressing_keys[HK_OLED_MAX_PRESSING_KEYCODES + 1];
 } hk_display_state_t;
 
-typedef struct {
-    bool init;
-    bool dirty;
-    bool is_main_side;
-    bool setting_default_scale;
-    bool setting_sniping_scale;
-    bool setting_scroll_buffer;
+typedef struct PACKED {
+    bool init : 1;
+    bool dirty : 1;
+
+    bool is_main_side : 1;
+    bool setting_default_scale : 1;
+    bool setting_sniping_scale : 1;
+    bool setting_scroll_buffer : 1;
 
     hk_pointer_state_t main;
     hk_pointer_state_t peripheral;
 
     hk_display_state_t display;
-    report_mouse_t     last_mouse_report;
 } hk_state_t;
+
+#ifdef HK_SPLIT_SYNC_STATE
+    _Static_assert(sizeof(hk_state_t) <= RPC_M2S_BUFFER_SIZE, "State too big to fit in split sync buffer size.");
+#endif
+
+extern hk_state_t g_hk_state;

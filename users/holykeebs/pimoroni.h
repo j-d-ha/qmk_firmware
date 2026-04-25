@@ -1,5 +1,3 @@
 #pragma once
 
-#include <stdint.h>
-
-int16_t hk_pimoroni_apply_acceleration(int16_t value);
+void pimoroni_adaptive_motion(report_mouse_t* mouse_report);

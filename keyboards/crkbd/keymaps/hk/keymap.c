@@ -1,6 +1,6 @@
 #include QMK_KEYBOARD_H
 
-#include "users/holykeebs/holykeebs.h"
+#include "holykeebs.h"
 
 enum layers {
     _BASE,
@@ -29,7 +29,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                    KC_LGUI, _______, KC_SPC,   KC_ENT,  _______,  KC_RALT),
 
     [_HK] = LAYOUT_split_3x6_3(
-        HK_DUMP, HK_SAVE, HK_RESET,HK_P_SET_DEFAULT,HK_P_SET_SNIPING,HK_P_SET_SCROLL_BUFFER, HK_S_MODE_T, HK_D_MODE_T, HK_C_SCROLL, HK_I_SCROLL, XXXXXXX, XXXXXXX,
+        HK_DUMP, HK_SAVE, HK_RESET,HK_P_SET_D,      HK_P_SET_S,      HK_P_SET_BUF,           HK_S_MODE_T, HK_D_MODE_T, HK_C_SCROLL, XXXXXXX,    XXXXXXX, XXXXXXX,
         XXXXXXX, MS_BTN1, MS_BTN2, MS_BTN3, MS_BTN4, MS_BTN5, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, MS_UP,   MS_DOWN, MS_LEFT, MS_RGHT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                    _______, _______, _______, _______, _______, _______)

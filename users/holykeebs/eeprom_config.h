@@ -1,28 +1,32 @@
 #pragma once
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
+#include "eeconfig.h"
 
-#include "pointing.h"
+typedef union PACKED {
+    uint8_t raw[EECONFIG_USER_DATA_SIZE];
+    struct {
+        struct {
+            hk_cursor_mode main_cursor_mode : 2;
+            bool main_drag_scroll : 1;
+            hk_scroll_lock main_scroll_lock : 2;
+            int16_t main_default_multiplier;
+            int16_t main_sniping_multiplier;
+            uint8_t main_scroll_buffer_size;
 
-#define HK_EEPROM_VERSION 100
-#define HK_EEPROM_CHECK 0xD4
+            hk_cursor_mode peripheral_cursor_mode : 2;
+            bool peripheral_drag_scroll : 1;
+            hk_scroll_lock peripheral_scroll_lock : 2;
+            int16_t peripheral_default_multiplier;
+            int16_t peripheral_sniping_multiplier;
+            uint8_t peripheral_scroll_buffer_size;
+        } pointing;
 
-typedef struct {
-    hk_cursor_mode cursor_mode;
-    bool           drag_scroll;
-    hk_scroll_lock scroll_lock;
-    bool           invert_scroll;
-
-    uint16_t default_multiplier_x100;
-    uint16_t sniping_multiplier_x100;
-    uint8_t  scroll_buffer;
-} hk_pointer_eeprom_t;
-
-typedef struct {
-    uint8_t version;
-    uint8_t check;
-
-    hk_pointer_eeprom_t main;
-    hk_pointer_eeprom_t peripheral;
+        bool check       : 1;
+    };
 } hk_eeprom_config_t;
+
+_Static_assert(sizeof(hk_eeprom_config_t) <= EECONFIG_USER_DATA_SIZE, "User EECONFIG block is not large enough.");
+
+extern hk_eeprom_config_t hk_eeprom_config;
