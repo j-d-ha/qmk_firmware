@@ -42,7 +42,6 @@ ifneq ($(POINTING_DEVICE),)
         POINTING_DEVICE_COMBINED = yes
         OPT_DEFS += -DSPLIT_POINTING_ENABLE
         OPT_DEFS += -DPOINTING_DEVICE_COMBINED
-        OPT_DEFS += -DEE_HANDS
         SIDE ?= right
 
         OPT_DEFS += -DHK_POINTING_DEVICE_LEFT_PIMORONI
@@ -51,10 +50,8 @@ ifneq ($(POINTING_DEVICE),)
 
         ifeq ($(SIDE),left)
             POINTING_DEVICE_DRIVER = pimoroni_trackball
-            OPT_DEFS += -DINIT_EE_HANDS_LEFT
         else ifeq ($(SIDE),right)
             POINTING_DEVICE_DRIVER = ps2
-            OPT_DEFS += -DINIT_EE_HANDS_RIGHT
             ifeq ($(PLATFORM),CHIBIOS)
                 PS2_DRIVER ?= vendor
             else
