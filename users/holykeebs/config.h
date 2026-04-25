@@ -11,7 +11,8 @@
 #        error "Missing HK master side definition"
 #    endif
 
-#    if !defined(__AVR__) && !defined(SERIAL_USART_TX_PIN)
+#    if !defined(__AVR__)
+#        undef SERIAL_USART_TX_PIN
 #        define SERIAL_USART_TX_PIN GP1
 #    endif
 #endif
