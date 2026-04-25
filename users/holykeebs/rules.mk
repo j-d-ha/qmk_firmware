@@ -11,7 +11,6 @@ ifneq ($(POINTING_DEVICE),)
     SRC += $(USER_PATH)/hk_debug.c
     SRC += $(USER_PATH)/pimoroni.c
     SRC += $(USER_PATH)/trackpoint.c
-    SRC += $(USER_PATH)/split_side.c
 
     VALID_POINTING_DEVICES := trackball trackpoint trackball_trackpoint trackpoint_trackball
     ifeq ($(filter $(POINTING_DEVICE),$(VALID_POINTING_DEVICES)),)
@@ -43,6 +42,7 @@ ifneq ($(POINTING_DEVICE),)
         POINTING_DEVICE_COMBINED = yes
         OPT_DEFS += -DSPLIT_POINTING_ENABLE
         OPT_DEFS += -DPOINTING_DEVICE_COMBINED
+        OPT_DEFS += -DEE_HANDS
         SIDE ?= right
 
         OPT_DEFS += -DHK_POINTING_DEVICE_LEFT_PIMORONI
@@ -51,10 +51,10 @@ ifneq ($(POINTING_DEVICE),)
 
         ifeq ($(SIDE),left)
             POINTING_DEVICE_DRIVER = pimoroni_trackball
-            OPT_DEFS += -DHK_BUILD_SIDE_LEFT
+            OPT_DEFS += -DINIT_EE_HANDS_LEFT
         else ifeq ($(SIDE),right)
             POINTING_DEVICE_DRIVER = ps2
-            OPT_DEFS += -DHK_BUILD_SIDE_RIGHT
+            OPT_DEFS += -DINIT_EE_HANDS_RIGHT
             ifeq ($(PLATFORM),CHIBIOS)
                 PS2_DRIVER ?= vendor
             else
